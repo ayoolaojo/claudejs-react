@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS Week 1 project</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="h-screen bg-yellow-100 text-center p-8 flex flex-col gap-5"> 
+
+    <h1 class="text-5xl font-bold">Student Score Tracker</h1>
+      
+     <ul class="text-2xl h-[auto] w-[50%] mx-auto bg-blue-100 py-5 " id="studentsList"></ul>
+     <button   id="passedStudents">Show Passed Students</button>
+     <p id="report"></p>
+
+
+
+
+
+
+    <script> 
+
+      const studentsList =  document.getElementById('studentsList')
+      const passedStudents=  document.getElementById('passedStudents')
+      const report =  document.getElementById('report')
+      
+
+
+      const students = [
+        { name: "Amina", score: 45 },
+        { name: "Tunde", score: 82 },
+        { name: "Chidi", score: 60 },
+        { name: "Ngozi", score: 38 },
+        { name: "Emeka", score: 91 },
+      ];
+
+       const totalStudents = students.length
+      const totalStudentsPassed = students.filter((student)=> student.score >= 50).length
+        
+
+      students.forEach((student)=>{
+        const li = document.createElement('li');
+        li.innerText = `${student.name} - ${student.score}  points `;
+        studentsList.appendChild(li)
+
+        if(student.score >= 50) {
+            li.style.color = 'green'
+        } else {
+            li.style.color = 'red'
+        }
+
+      })
+
+
+      passedStudents.addEventListener('click' , ()=> {
+         studentsList.innerHTML = ''
+        students.filter((student)=> student.score >= 50).map((student)=>{
+            const li = document.createElement('li')
+            li.innerText = `${student.name} -  ${student.score} points`
+            studentsList.appendChild(li)
+            li.style.color = 'green'
+            
+        })
+             
+      })
+
+      report.innerText = `${totalStudentsPassed} students passed  out of ${totalStudents} students`
+
+       
+
+      
+
+  
+           
+
+      
+
+     
+
+
+    </script>
+  </body>
+</html>
