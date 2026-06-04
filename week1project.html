@@ -47,18 +47,24 @@
         { name: "Emeka", score: 91 },
       ];
 
-      const totalStudents = students.length;
-      const totalStudentsPassed = students.filter(
-        (student) => student.score >= 50,
-      ).length;
+      // const totalStudents = students.length;
+      // const totalStudentsPassed = students.filter(
+      //   (student) => student.score >= 50,
+      // ).length;
 
       function renderStudents(list) {
         studentsList.innerHTML = "";
         list.forEach((student) => {
           const li = document.createElement("li");
           li.innerText = `${student.name} - ${student.score}  points `;
-          li.style.color = student.score > 50 ? "green" : "red";
-          studentsList.appendChild(li);
+          li.style.color = student.score >= 50 ? "green" : "red";
+          studentsList.appendChild(li); 
+
+          const totalStudents = students.length;
+
+          const passed = students.filter((student)=>student.score >= 50).length
+           report.innerText = `${passed} students passed  out of ${totalStudents} students`;
+         
         });
       }
 
@@ -78,7 +84,7 @@
         );
       });
 
-      report.innerText = `${totalStudentsPassed} students passed  out of ${totalStudents} students`;
+      
 
       function addStudent(nName, nScore) {
         const newStudent = {
@@ -97,24 +103,15 @@
         const nName = newStudentName.value;
         const nScore = Number(newStudentScore.value);
 
+        if(nName.trim() ==='' || isNaN(nScore)){
+          alert('student details cannot be empty')
+          return
+        }
+
         addStudent(nName, nScore);
       });
 
-      //  addStudentBtn.addEventListener('click', ()=>{
-
-      //    const newStudent = {
-      //    name : newStudentName.value,
-      //    score: Number(newStudentScore.value)
-      //  }
-
-      //  students.push(newStudent);
-
-      //     newStudentName.value = '';
-      //     newStudentScore.value = '';
-
-      //     renderStudents(students);
-
-      //  })
+      
     </script>
   </body>
 </html>
