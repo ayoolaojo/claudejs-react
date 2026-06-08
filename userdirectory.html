@@ -9,9 +9,15 @@
     <h1>User Directory</h1>
     <p id="status"></p>
     <p id="errorMessage"></p>
-    <input id="searchInput" placeholder="Search by name ..." type="text" />
+    <input
+      id="searchInput"
+      placeholder="Search by name or email.."
+      type="text"
+    />
+    <button id="searchBtn">Search</button>
 
     <ul id="userList"></ul>
+     <p id="report"></p>
 
     <script>
       const status = document.getElementById("status");
@@ -70,6 +76,32 @@
         }
         status.innerText = "";
       }
+
+      searchInput.addEventListener("keyup", () => {
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        const filtered = allUsers.filter(
+          (user) =>
+            user.name.toLowerCase().includes(searchTerm) ||
+            user.email.toLowerCase().includes(searchTerm),
+        );
+
+         if(!allUsers.includes(searchTerm)){
+            report.innerText = '0 user found'
+         }
+
+        renderUsers(filtered);
+       
+        report.innerText = `Showing ${filtered.length} of ${allUsers.length} users`
+      });  
+
+       
+      searchBtn.addEventListener('click', ()=> {
+        searchInput.value = ''
+        renderUsers(filtered)
+      })
+
+
+
 
       fetchUsers();
     </script>
