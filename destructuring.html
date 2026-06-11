@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DESTRUCTURING</title>
+  </head>
+  <body>
+
+          <h1>DESTRUCTURING</h1>
+
+
+
+    <script>
+        
+//         Destructure name, price, and inStock from product in one line
+// Create a new product object with price updated to 999 using spread — leave product unchanged
+// Destructure the first order from orders using array destructuring
+// Write a function called printOrder that takes an order object as a parameter and uses destructuring in the parameter itself to print: "Order 1: 2x Laptop"
+
+
+      const product = {
+        id: 1,
+        name: "Laptop",
+        price: 1200,
+        brand: "Dell",
+        inStock: true,
+      };
+
+      const orders = [
+        { id: 1, product: "Laptop", qty: 2 },
+        { id: 2, product: "Phone", qty: 1 },
+        { id: 3, product: "Monitor", qty: 3 },
+      ];
+
+      const {name,price,inStock} = product
+
+    console.log(name)
+    console.log(price)
+    console.log(inStock)
+
+    const newProduct = {...product, price:999}
+    console.log(newProduct)
+
+    const [firstOrder] = orders;
+    console.log(firstOrder)
+
+
+    const printOrder = ({id,product,qty}) => {
+      console.log(`${id} - ${product} - *${qty}`)
+    }
+
+    printOrder(firstOrder)
+
+
+
+
+    </script>
+  </body>
+</html>
