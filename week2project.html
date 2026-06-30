@@ -6,19 +6,43 @@
     <title>LIVE COUNTRY EXPLORER</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
-  <body class="flex flex-col h-screen w-full bg-indigo-200">
-    <h1>LIVE COUNTRY EXPLORER</h1>
+  <body
+    class="flex flex-col h-screen w-full bg-indigo-200 p-8 items-center gap-2"
+  >
+    <h1 class="font-bold text-3xl">LIVE COUNTRY EXPLORER</h1>
+
+    <div>
+      <input
+        id="searchInput"
+        type="text"
+        class="text-center h-10 w-150 bg-white rounded-full"
+      />
+      <button
+        id="searchBtn"
+        class="w-50 h-10 bg-blue-500 text-white rounded-full"
+      >
+        Search
+      </button>
+    </div>
+
+    <p id="report" class="text-indigo-700"></p>
+
     <p id="loading"></p>
     <p id="errorMessage"></p>
-    <div id="countryList"></div>
-
-    
+    <div
+      id="countryList"
+      class="h-[auto] w-[100%] bg-blue-100 py-5 flex flex-wrap"
+    >
+  </div>
 
     <script>
-      const base_Url = 'https://countriesnow.space/api/v0.1/countries/info?returns=name,capital,unicodeFlag,region';
+      const base_Url ="https://countriesnow.space/api/v0.1/countries/info?returns=name,capital,unicodeFlag,region";
       const loading = document.getElementById("loading");
       const errorMessage = document.getElementById("errorMessage");
-      const countryList = document.getElementById('countryList')
+      const countryList = document.getElementById("countryList");
+      const searchInput = document.getElementById("searchInput");
+      const report = document.getElementById("report");
+      const searchBtn = document.getElementById("searchBtn");
       let all_Countries = [];
 
       const getCountries = async () => {
@@ -29,53 +53,80 @@
           const response = await fetch(base_Url);
           if (!response.ok) {
             throw new Error("unable to load data, please try again!");
-            return;
+          
           }
           const countries = await response.json();
           console.log(countries);
           all_Countries = countries.data;
+          
 
-           renderCountries(all_Countries)
-
-
+          renderCountries(all_Countries);
         } catch (error) {
-            errorMessage.innerText = error.message
+          errorMessage.innerText = error.message;
         }
-        loading.innerText = ''
-      
+        loading.innerText = "";
+
+        searchCountries();
       };
 
       getCountries();
 
       const renderCountries = (list) => {
-         countryList.innerHTML = ''
-        list.forEach((country)=>{
-          const div = document.createElement('div');
-          const name = document.createElement('h1');
-          name.innerText = country.name;
+        countryList.innerHTML = "";
+        if(list.length === 0){
+          const li = document.createElement("li");
+          li.innerText = "No country found";
+          li.style.color = "red";
+          countryList.appendChild(li);
+          
+          return
+        }
+        list.forEach((country) => {
+          const div = document.createElement("div");
+          div.className =" flex flex-col items-center justify-center border-2 border-slate-500 p-3 m-3 h-[25vh] w-[17vw] rounded-lg gap-3";
+          const name = document.createElement("h1");
+          name.innerText = `Country: ${country.name}`;
 
-          const capital = document.createElement('p');
-          capital.innerText = country.capital;
+          const capital = document.createElement("p");
+          capital.innerText = `Capital: ${country.capital}`;
 
-          const flag = document.createElement('span');
+          const flag = document.createElement("span");
           flag.innerText = country.unicodeFlag;
 
           div.appendChild(name);
           div.appendChild(capital);
           div.appendChild(flag);
 
-          countryList.appendChild(div)
+          countryList.appendChild(div);
+        });
+      };
+
+
+      const searchCountries = () => {
+        searchInput.addEventListener("keyup", () => {
+           if(searchInput.value.trim()=== ''){
+              alert('empty search')
+              return
+           }
+          const searchTerm = searchInput.value.trim().toLowerCase();
+          const searchFilter = all_Countries.filter((country) =>
+            country.name.toLowerCase().includes(searchTerm) 
+            
+          );
+
+          renderCountries(searchFilter);
+          report.innerText = `Showing ${searchFilter.length} of ${all_Countries.length} results`;
+        });
+
+        
+      };
+
+       searchBtn.addEventListener('click', ()=> {
+          searchInput.value = ''
           
-
-
         })
-      }
 
-     
-
-    
-
-
+       
     </script>
   </body>
 </html>

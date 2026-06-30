@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetching</title>
+  </head>
+  <body>
+    <h1>Working with APIs</h1>
+
+    <script>
+
+      const allPosts = [];
+      const baseUrl = "https://jsonplaceholder.typicode.com/posts";
+      const getAllPosts = async () => {
+        try {
+          const response = await fetch(baseUrl);
+          if (!response.ok) {
+            throw new Error("Failed to get posts");
+          }
+          const posts = await response.json();
+          
+
+          console.log(posts);
+          console.log("Total posts:" + posts.length);
+        } catch (error) {
+          console.log(error.message);
+        }
+      };
+
+      getAllPosts();
+
+      const getPostById = async (id) => {
+        try {
+          const response = await fetch(`${baseUrl}/${id}`);
+
+          if (response.status === 404) {
+            throw new Error("Post not found");
+          }
+
+          const data = await response.json();
+          console.log(data);
+        } catch (error) {
+          console.log(`Error - ${error.message}`);
+        }
+      };
+
+      getPostById(20);
+
+      const createPost = async (title, body, userId) => {
+        try {
+          const response = await fetch(baseUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              title,
+              body,
+              userId,
+            }),
+          });
+
+          if (response.status !== 201) {
+            throw new Error(`Request failed: ${response.status}`);
+          }
+
+          const data = await response.json();
+          allPosts = posts;
+          
+
+          console.log("Post created:", data);
+
+        
+        } catch (error) {
+          console.log(error.message);
+        }
+
+
+      };
+
+      createPost("Ayoola", "new Post", 410);
+
+
+      const markPostAsFeatured = async(id) => {
+         try {
+          const response = await fetch(`${baseUrl}/${id}`, {
+            method: 'PATCH',
+            headers : {
+            'Content-Type':'application/json',
+
+            },
+            body : JSON.stringify({
+               featured : true,
+               
+            })
+              
+            
+          })  
+
+            if(!response.ok) {
+              throw new Error(`Error: ${response.statusText}`)
+            }
+
+          const data = await response.json()
+          console.log(data)
+         } catch (error) {
+          console.log(error.message)
+         }
+      }
+
+      markPostAsFeatured(10)
+
+
+
+      const runFullCycle = async() => {
+          
+             try {
+              const createPost = await fetch(baseUrl,{
+                method:'POST',
+                headers:{
+                  'Content-Type':"application/json",
+                },
+                body:JSON.stringify({
+                  id:1440,
+                  title:'createdByAy',
+                  body: 'Oluwalorem ipsum loresn senson'
+                })
+              })
+                if(!createPost.ok){
+                  throw new Error(`Error:${createPost.statusText}`)
+                }
+
+                const newPost =await createPost.json()
+                console.log(newPost)
+
+
+                const updatePost = await fetch(`${baseUrl}/${newPost.id}`,{
+                  method:'PATCH',
+                  headers:{
+                    'Content-Type': 'Application/json',
+
+                  },
+                  body: JSON.stringify({
+                     featured: true
+                  })
+                })
+
+                 if(!updatePost.ok){
+                  throw new Error(`Error: ${updatePost.status}`)
+                 }
+
+                 const updatedPost = await updatePost.json()
+                 console.log(updatedPost)
+
+
+               const deletePost = await fetch(`${baseUrl}/${newPost.id}`,{
+                method: 'DELETE'
+               })   
+
+               if(!deletePost.ok) {
+                throw new Error(`Delete Failed: ${deletePost.status}`)
+               }
+                
+                 console.log(`Deleted Post:${newPost.id}`)
+
+
+                 console.log('cycle completed')
+                
+             } catch (error) {
+              console.log(error.message)
+             }
+          
+        
+      }
+    </script>
+  </body>
+</html>
